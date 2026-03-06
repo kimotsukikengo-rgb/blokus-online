@@ -623,7 +623,7 @@
   function handleTrayTap(clientX, clientY) {
     if (aiThinking) return;
     const rect = trayCanvas.getBoundingClientRect();
-    const x = clientX - rect.left + trayCanvas.parentElement.scrollLeft;
+    const x = clientX - rect.left;
     const y = clientY - rect.top;
 
     for (const tp of trayPieces) {
