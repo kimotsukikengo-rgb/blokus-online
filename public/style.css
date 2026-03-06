@@ -333,7 +333,7 @@ html, body {
 }
 
 #tray-canvas {
-  touch-action: pan-x;
+  touch-action: manipulation;
 }
 
 /* 結果画面 */

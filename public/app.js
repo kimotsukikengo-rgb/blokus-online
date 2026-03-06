@@ -620,11 +620,11 @@
   });
 
   // --- トレイタッチ ---
-  trayCanvas.addEventListener('pointerdown', (e) => {
+  function handleTrayTap(clientX, clientY) {
     if (aiThinking) return;
     const rect = trayCanvas.getBoundingClientRect();
-    const x = e.clientX - rect.left + trayCanvas.parentElement.scrollLeft;
-    const y = e.clientY - rect.top;
+    const x = clientX - rect.left + trayCanvas.parentElement.scrollLeft;
+    const y = clientY - rect.top;
 
     for (const tp of trayPieces) {
       if (x >= tp.x - 4 && x <= tp.x + tp.w + 4 &&
@@ -643,7 +643,38 @@
         return;
       }
     }
+  }
+
+  // 二重発火防止用タイムスタンプ
+  let lastTrayTapTime = 0;
+  function guardedTrayTap(clientX, clientY) {
+    const now = Date.now();
+    if (now - lastTrayTapTime < 300) return;
+    lastTrayTapTime = now;
+    handleTrayTap(clientX, clientY);
+  }
+
+  // clickイベントはモバイルでも確実に発火する
+  trayCanvas.addEventListener('click', (e) => {
+    guardedTrayTap(e.clientX, e.clientY);
   });
+
+  // touchendフォールバック（clickが発火しないケースに対応）
+  let trayTouchStart = null;
+  trayCanvas.parentElement.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      trayTouchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  }, { passive: true });
+  trayCanvas.parentElement.addEventListener('touchend', (e) => {
+    if (!trayTouchStart || e.changedTouches.length === 0) return;
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - trayTouchStart.x;
+    const dy = touch.clientY - trayTouchStart.y;
+    trayTouchStart = null;
+    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) return;
+    guardedTrayTap(touch.clientX, touch.clientY);
+  }, { passive: true });
 
   // --- 結果表示 ---
   function showResults() {
