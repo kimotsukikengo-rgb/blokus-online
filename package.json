@@ -1,0 +1,20 @@
+{
+  "name": "blokus-online",
+  "version": "1.0.0",
+  "description": "Blokus online multiplayer board game",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "keywords": [
+    "blokus",
+    "board-game",
+    "multiplayer"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  }
+}

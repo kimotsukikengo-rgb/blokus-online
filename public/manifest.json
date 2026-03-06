@@ -1,0 +1,17 @@
+{
+  "name": "Blokus Online",
+  "short_name": "Blokus",
+  "description": "ブロックス オンライン対戦ゲーム",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

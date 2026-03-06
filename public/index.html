@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#1a1a2e">
+  <link rel="manifest" href="/manifest.json">
+  <title>Blokus Online</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- ロビー画面 -->
+  <div id="lobby" class="screen active">
+    <div class="lobby-container">
+      <h1 class="title">BLOKUS</h1>
+      <p class="subtitle">オンライン対戦</p>
+
+      <div class="menu-section">
+        <button id="btn-create" class="btn btn-primary">部屋を作成</button>
+        <div class="divider">または</div>
+        <div class="join-form">
+          <input type="text" id="room-code-input" placeholder="部屋コードを入力" maxlength="6" autocomplete="off">
+          <button id="btn-join" class="btn btn-secondary">参加</button>
+        </div>
+      </div>
+
+      <div class="menu-section">
+        <button id="btn-cpu" class="btn btn-accent">コンピューター対戦</button>
+      </div>
+
+      <div class="menu-section">
+        <button id="btn-local" class="btn btn-outline">ローカル対戦</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 待機画面 -->
+  <div id="waiting" class="screen">
+    <div class="lobby-container">
+      <h2>部屋コード</h2>
+      <div id="room-code-display" class="room-code">----</div>
+      <p class="hint">このコードを他のプレイヤーに共有してください</p>
+
+      <div id="player-list" class="player-list"></div>
+
+      <div class="player-count-select">
+        <label>プレイ人数:</label>
+        <select id="player-count">
+          <option value="2">2人</option>
+          <option value="3">3人</option>
+          <option value="4" selected>4人</option>
+        </select>
+      </div>
+
+      <button id="btn-start" class="btn btn-primary" disabled>ゲーム開始</button>
+      <button id="btn-leave" class="btn btn-outline">退出</button>
+    </div>
+  </div>
+
+  <!-- コンピューター対戦設定 -->
+  <div id="cpu-setup" class="screen">
+    <div class="lobby-container">
+      <h2>コンピューター対戦</h2>
+
+      <div class="difficulty-select">
+        <label>難易度:</label>
+        <div class="difficulty-buttons">
+          <button class="diff-btn" data-diff="easy">簡単</button>
+          <button class="diff-btn active" data-diff="normal">普通</button>
+          <button class="diff-btn" data-diff="hard">難しい</button>
+        </div>
+      </div>
+
+      <div class="player-count-select">
+        <label>プレイ人数:</label>
+        <select id="cpu-player-count">
+          <option value="2">2人 (あなた vs CPU)</option>
+          <option value="3">3人 (あなた vs CPU x2)</option>
+          <option value="4" selected>4人 (あなた vs CPU x3)</option>
+        </select>
+      </div>
+
+      <button id="btn-cpu-start" class="btn btn-primary">ゲーム開始</button>
+      <button id="btn-cpu-back" class="btn btn-outline">戻る</button>
+    </div>
+  </div>
+
+  <!-- ローカル対戦設定 -->
+  <div id="local-setup" class="screen">
+    <div class="lobby-container">
+      <h2>ローカル対戦</h2>
+      <div class="player-count-select">
+        <label>プレイ人数:</label>
+        <select id="local-player-count">
+          <option value="2">2人</option>
+          <option value="3">3人</option>
+          <option value="4" selected>4人</option>
+        </select>
+      </div>
+      <button id="btn-local-start" class="btn btn-primary">ゲーム開始</button>
+      <button id="btn-local-back" class="btn btn-outline">戻る</button>
+    </div>
+  </div>
+
+  <!-- ゲーム画面 -->
+  <div id="game" class="screen">
+    <!-- ヘッダー -->
+    <div id="game-header">
+      <div id="turn-indicator"></div>
+      <div id="game-info"></div>
+    </div>
+
+    <!-- ボード -->
+    <div id="board-container">
+      <canvas id="board-canvas"></canvas>
+    </div>
+
+    <!-- ピース操作ボタン -->
+    <div id="piece-controls">
+      <button id="btn-rotate" class="ctrl-btn" title="回転">&#x21BB;</button>
+      <button id="btn-flip" class="ctrl-btn" title="反転">&#x21C4;</button>
+      <button id="btn-pass" class="ctrl-btn pass-btn" title="パス">パス</button>
+    </div>
+
+    <!-- ピース選択エリア -->
+    <div id="piece-tray">
+      <canvas id="tray-canvas"></canvas>
+    </div>
+  </div>
+
+  <!-- ゲーム終了画面 -->
+  <div id="result" class="screen">
+    <div class="lobby-container">
+      <h2 id="result-title">ゲーム終了</h2>
+      <div id="result-scores"></div>
+      <button id="btn-back-lobby" class="btn btn-primary">ロビーに戻る</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/game-logic.js"></script>
+  <script src="/ai.js"></script>
+  <script src="/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
+</body>
+</html>
